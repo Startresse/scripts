@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script will banirize given shell/bash script into given or default folder.
+# It uses shc `sudo apt install shc`.
+
+# NOTE : just learned you could put a .sh script directly in bin so not sure if it's useful
+# NOTE 2 : it is useles
+
 if [ -z $1 ]; then
     echo "Please provide a script path"
     exit

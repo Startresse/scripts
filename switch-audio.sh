@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script will circulate on all your sound output devices on each call.
+
 # get sinks and current sink
 current_sink_index=$(pacmd list-sinks | grep '*' | grep -o '[0-9]*')
 sink_index_list=( $(pacmd list-sinks | grep 'index' | grep -o '[0-9]*') )
