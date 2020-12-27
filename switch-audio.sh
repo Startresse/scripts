@@ -1,38 +1,23 @@
 #!/bin/bash
 
+# get sinks and current sink
+sink_index_list=( $(pacmd list-sinks | grep 'index' | grep -o '[0-9]*') )
+sink_name_list=( $(pacmd list-sinks | grep device.product.name | grep -o '".*"' | sed 's/\ //g') )
+current_sink_index=$(pacmd list-sinks | grep '*' | grep -o '[0-9]*')
 
-## switching and display
-
-switch_to_hs()
-{
-    pacmd set-default-sink 1
-    echo "Switched to HEADSET"
-}
-
-switch_to_sp()
-{
-    pacmd set-default-sink 11
-    echo "Switched to SPEAKER"
-}
-
-
-## parsing and automation
-
-if [ $# -gt 0 ]
-then
-    if [ $1 == "h" ] || [ $1 == "head" ] || [ $1 == "headset" ] || [ $1 == 0 ]
-    then
-        switch_to_hs
-    else
-        switch_to_sp
+# fond index of next unused sink
+next_index=0
+for ((i=0;i<${#sink_index_list[@]};i++)) do
+    if [ $device_found ]; then
+        next_index=$i
+        break
     fi
-else
-    sink_index=$(pacmd list-sinks | grep '*' | grep -o '[0-9]*')
 
-    if [ $sink_index -eq 11 ]
-    then
-        switch_to_hs
-    else
-        switch_to_sp
+    if [ ${sink_index_list[$i]} -eq $current_sink_index ]; then
+        device_found=1
     fi
-fi
+done
+
+# switch to next unused sink
+pacmd set-default-sink ${sink_index_list[$next_index]}
+echo Switched to ${sink_name_list[$next_index]}
