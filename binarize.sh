@@ -12,7 +12,11 @@ fi
 
 filename=$( echo $1 | sed 's/.*\///' ) #remove path
 binary_name=$( echo $filename | sed 's/\..*//' ) #remove extension
-binary_path=$PERSONAL_BIN
+if [ -z ${2+x} ]; then
+    binary_path=$PERSONAL_BIN
+else
+    binary_path=$2
+fi
 
 shc -f $1 -o $binary_name
 mv $binary_name $binary_path/$binary_name
